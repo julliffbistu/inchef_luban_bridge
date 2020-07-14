@@ -6,6 +6,10 @@ import roslib
 from kitchen.msg import obj
 from kitchen.msg import objs
 
+import cv2
+import numpy as np
+from PIL import Image
+from cv_bridge import CvBridge
 
 def callback(data):
     '''
@@ -32,6 +36,25 @@ def callback(data):
 
     get_msg = data.objects_vector[0]
 
+    for i in range(len(get_msg.id)):
+        if get_msg.score[i] >= 0.8:
+            
+            if get_msg.classname[i] == "beef":
+                print("count----:",i)
+    print("**********")
+    print(data.objects_vector[0].masks[0].height)
+    print(data.objects_vector[0].masks[0].width)
+    print(data.header)
+    #cimgmask =np.uint8(get_msg.masks[0])
+    #temp_mask=cimgmask*255
+    bridge=CvBridge()
+    cv_image =bridge.imgmsg_to_cv2(data.rgb_img,"bgr8")
+    cv2.imshow("img",cv_image)
+
+    cv_depth_image = bridge.imgmsg_to_cv2(data.depth_img,"passthrough")
+    print(cv_depth_image)
+    cv2.waitKey(1)
+    '''
     print(get_msg.id)
     print(get_msg.classname)
     print(get_msg.score)
@@ -51,7 +74,7 @@ def callback(data):
     print(data.header)
     print("----changdu-----",len(get_msg.id))
     print("----"*15)
-
+    '''
 
 
 def listener():

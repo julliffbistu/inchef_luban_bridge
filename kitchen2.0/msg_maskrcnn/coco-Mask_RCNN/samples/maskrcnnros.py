@@ -137,12 +137,12 @@ def display_instances(image,boxes,masks,ids,names,scores):
         )
 
     detect_objs.objects_vector.append(detect_obj)
-
+    
     objs_msg = objs()
     now = rospy.Time.now()
     detect_objs.header.stamp = now
     detect_objs.header.frame_id = "map"
-    
+
     return image
 
 sys.path.append(os.path.join(ROOT_DIR, "samples/coco/"))  # To find local version
@@ -198,6 +198,10 @@ model.load_weights(COCO_MODEL_PATH, by_name=True)
 class_names = ['BG','pan','beef','plate', 'vegetablebowl','broccoli','souppothandle','panhandle','nethandle','seasoningbottle','seasoningbowl']
 
 def model_detection(img,depth_img):
+    
+    bridge=CvBridge()
+    detect_objs.rgb_img = bridge.cv2_to_imgmsg(img, encoding="bgr8")
+    detect_objs.depth_img = bridge.cv2_to_imgmsg(depth_img,"passthrough")
 
     results=model.detect([img],verbose=0)
     r=results[0]
@@ -205,8 +209,8 @@ def model_detection(img,depth_img):
             img,r['rois'], r['masks'], r['class_ids'], 
                         class_names, r['scores']
     )
-    
-    print("----------------22---------------",detect_objs)
+
+    #print("----------------22---------------",detect_objs)
     detect_objs_pub = rospy.Publisher("processor/objs",objs,queue_size=1)
     detect_objs_pub.publish(detect_objs)
     cv2.imshow("img",frame)
