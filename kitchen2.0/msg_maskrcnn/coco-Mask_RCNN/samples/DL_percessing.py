@@ -3,21 +3,21 @@
 import rospy
 import roslib
 #from后边是自己的包.msg，也就是自己包的msg文件夹下，test是我的msg文件名test.msg
-from kitchen.msg import obj
-from kitchen.msg import objs
+from inchef_dl_msgs.msg import obj
+from inchef_dl_msgs.msg import objs
 
 import cv2
 import numpy as np
 from PIL import Image
 from cv_bridge import CvBridge
 
-from kitchen.msg import sglobj
-from kitchen.msg import listobj
+from inchef_dl_msgs.msg import sglobj
+from inchef_dl_msgs.msg import listobj
 
 def prcess_contours(cv_image, classname, masks_img, mask_id, x, y, width, height, scores):
-
+    list_info=[]
     #print("max : ",i,classname)
-    binery,contours, hierarchy = cv2.findContours(masks_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(masks_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     for c in range(len(contours)):
         #Area = cv2.contourArea(contours[c])
 
@@ -166,40 +166,43 @@ def callback(data):
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
             
             if get_msg.classname[i] == "plate" and get_msg.score[i] == plate_score[1]:
                 temp_list = []
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
-
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
             
             if get_msg.classname[i] == "beef" and get_msg.score[i] == beef_score[0]:
                 temp_list = []
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i], 
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
             if get_msg.classname[i] == "pan" and get_msg.score[i] == pan_score[0]:
                 temp_list = []
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
             if get_msg.classname[i] == "broccoli" and get_msg.score[i] == broccoli_score[0]:
                 temp_list = []
@@ -216,90 +219,99 @@ def callback(data):
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
             if get_msg.classname[i] == "broccoli" and get_msg.score[i] == broccoli_score[2]:
                 temp_list = []
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
             if get_msg.classname[i] == "souppothandle" and get_msg.score[i] == souppothandle_score[0]:
                 temp_list = []
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
             if get_msg.classname[i] == "nethandle" and get_msg.score[i] == nethandle_score[0]:
                 temp_list = []
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
             if get_msg.classname[i] == "vegetablebowl" and get_msg.score[i] == vegetablebowl_score[0]:
                 temp_list = []
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
             if get_msg.classname[i] == "seasoningbowl" and get_msg.score[i] == seasoningbowl_score[0]:
                 temp_list = []
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
             if get_msg.classname[i] == "seasoningbottle" and get_msg.score[i] == seasoningbottle_score[0]:
                 temp_list = []
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
             if get_msg.classname[i] == "seasoningbottle" and get_msg.score[i] == seasoningbottle_score[1]:
                 temp_list = []
                 temp_list = prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
             if get_msg.classname[i] == "panhandle" and get_msg.score[i] == panhandle_score[0]:
                 temp_list = []
                 prcess_contours(cv_image, get_msg.classname[i], mask_image, get_msg.id[i],
                 get_msg.roi[i].x_offset, get_msg.roi[i].y_offset, get_msg.roi[i].height, get_msg.roi[i].width, get_msg.score[i])
 
-                for number in range(len(temp_list)):
-                    single_obj.id_info.append(temp_list[number])
-                single_obj.classname.append(get_msg.classname[i])
-                single_obj.score.append(get_msg.score[i])
+                if len(temp_list)>0:
+                    for number in range(len(temp_list)):
+                        single_obj.id_info.append(temp_list[number])
+                    single_obj.classname.append(get_msg.classname[i])
+                    single_obj.score.append(get_msg.score[i])
 
     if len(single_obj.id_info)>0:
         #print("1111:",single_obj)
@@ -313,7 +325,7 @@ def callback(data):
     list_obj.rgb_img_to_pos = bridge.cv2_to_imgmsg(rgb_img_to_pos, encoding="bgr8")
     list_obj.depth_img_to_pos = bridge.cv2_to_imgmsg(depth_img_to_pos,"passthrough")
 
-    print("1111:",list_obj)
+    #print("1111:",list_obj)
     list_obj_pub = rospy.Publisher("process_uv/listobjs",listobj,queue_size=1)
     list_obj_pub.publish(list_obj)
 
