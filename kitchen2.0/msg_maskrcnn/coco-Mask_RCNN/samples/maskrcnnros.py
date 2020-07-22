@@ -102,7 +102,6 @@ def display_instances(image,boxes,masks,ids,names,scores):
         if not np.any(boxes[i]):
             continue
         y1,x1,y2,x2=boxes[i]
-
         box = RegionOfInterest()
         box.x_offset = np.asscalar(x1)
         box.y_offset = np.asscalar(y1)
@@ -110,14 +109,11 @@ def display_instances(image,boxes,masks,ids,names,scores):
         box.width = np.asscalar(x2 - x1)
         detect_obj.roi.append(box)
 
-        
         masklist = msg.Image()
-        masklist.height = y2 - y1
-        masklist.width = x2 - x1
-        masklist.encoding = "mono8"
-        masklist.is_bigendian = False
-        masklist.step = y2 - y1
-        masklist.data = (masks[x1:x2, y1:y2, i]).tobytes()
+        cimgmask =np.uint8(masks[:, :, i])
+        temp = cimgmask*255
+        bridge1=CvBridge()
+        masklist = bridge1.cv2_to_imgmsg(temp, encoding="passthrough")
         detect_obj.masks.append(masklist)
         
 
@@ -130,11 +126,10 @@ def display_instances(image,boxes,masks,ids,names,scores):
         detect_obj.score.append(scores[i])
 
         image=cv2.rectangle(image,(x1,y1),(x2,y2),color,2)
+        print("***********",[x1,y1,x2,y2])
         score=scores[i] if scores is not None else None
         caption='{}{:.2f}'.format(label,score) if score else label
-        image=cv2.putText(
-            image,caption,(x1,y1),cv2.FONT_HERSHEY_COMPLEX,0.7,color,2
-        )
+        image=cv2.putText(image,caption,(x1,y1),cv2.FONT_HERSHEY_SIMPLEX,0.5,(255,0,0),2)
 
     detect_objs.objects_vector.append(detect_obj)
     
